@@ -1,4 +1,3 @@
-
       int ActiveProcessorCount                     = -1                                        {product} {default}
     uintx AdaptiveSizeDecrementScaleFactor         = 4                                         {product} {default}
     uintx AdaptiveSizeMajorGCDecayTimeScale        = 10                                        {product} {default}

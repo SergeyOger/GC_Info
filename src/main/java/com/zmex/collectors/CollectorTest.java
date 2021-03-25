@@ -13,7 +13,7 @@ public class CollectorTest {
     final long executionStartTime = System.currentTimeMillis();
 
     List<LoadUnit> oldGenerationCandidates = new ArrayList<>();
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100; i++) {
       if (i % 50 == 0) {
         oldGenerationCandidates.addAll(performLoad());
       } else {
@@ -41,7 +41,7 @@ public class CollectorTest {
     System.out.println("Total execution time: " + executionTime + " milliseconds");
     System.out.println("GC execution time: " + gcExecutionTime + " milliseconds");
     System.out.println("GC iterations: " + gcIterationsCount);
-    System.out.println("Payload percentage: " + Math.round(payloadPercentage * 100) / 100 + " %");
+    System.out.println("Throughput: " + Math.round(payloadPercentage * 100) / 100 + " %");
     System.out.println("-------------------------------------------------------------------------");
 
     System.out.println("Memory allocation statistic");
