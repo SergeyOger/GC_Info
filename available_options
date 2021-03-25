@@ -1,0 +1,1 @@
+-verbose:gc command is an alias for -Xlog:gc. -Xlog is the general logging configuration option for logging in the HotSpot JVM
