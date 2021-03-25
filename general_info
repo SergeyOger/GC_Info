@@ -1,0 +1,104 @@
+                                    Performance Considerations
+
+    • Throughput is the percentage of total time not spent in garbage collection considered over
+      long periods of time. Throughput includes time spent in allocation (but tuning for speed
+      of allocation generally isn't needed).
+
+    • Latency is the responsiveness of an application. Garbage collection pauses affect the
+      responsiveness of applications.
+
+
+                                          Serial Collector
+
+  The serial collector uses a single thread to perform all garbage collection work, which makes
+it relatively efficient because there is no communication overhead between threads.
+
+  It's best-suited to single processor machines because it can't take advantage of multiprocessor
+hardware, although it can be useful on multiprocessors for applications with small data sets
+(up to approximately 100 MB). The serial collector is selected by default on certain hardware
+and operating system configurations, or can be explicitly enabled with the option -XX:+UseSerialGC.
+
+
+                                          Parallel Collector
+
+  The parallel collector is also known as throughput collector, it's a generational collector
+similar to the serial collector. The primary difference between the serial and parallel collectors
+is that the parallel collector has multiple threads that are used to speed up garbage collection.
+
+  The parallel collector is intended for applications with medium-sized to large-sized data sets
+that are run on multiprocessor or multithreaded hardware.
+You can enable it by using the -XX:+UseParallelGC option.
+
+  Parallel compaction is a feature that enables the parallel collector to perform major collections
+in parallel. Without parallel compaction, major collections are performed using a single thread,
+which can significantly limit scalability. Parallel compaction is enabled by default
+if the option -XX:+UseParallelGC has been specified.
+You can disable it by using the -XX:-UseParallelOldGC option.
+
+Options to Specify Parallel Collector Behaviors
+You can specify maximum garbage collection pause time, throughput, and footprint (heap size).
+
+Maximum garbage collection pause time:
+  The maximum pause time goal is specified with the command-line option -XX:MaxGCPauseMillis=<N>.
+This is interpreted as a hint that pause times of <N> milliseconds or less are desired; by default,
+no maximum pause- time goal. If a pause-time goal is specified, the heap size and other parameters
+related to garbage collection are adjusted in an attempt to keep garbage collection pauses shorter
+than the specified value; however, the desired pause-time goal may not always be met.
+These adjustments may cause the garbage collector to reduce the overall throughput of the application.
+
+Throughput:
+  The throughput goal is measured in terms of the time spent doing garbage collection versus
+the time spent outside of garbage collection, referred to as application time. The goal is specified
+by the command-line option -XX:GCTimeRatio=<N>, which sets the ratio of garbage collection time
+to application time to 1 / (1 + <N>).
+For example, -XX:GCTimeRatio=19 sets a goal of 1/20 or 5% of the total time in garbage collection.
+The default value is 99, resulting in a goal of 1% of the time in garbage collection.
+
+Footprint:
+  The maximum heap footprint is specified using the option -Xmx<N>. In addition, the collector has
+an implicit goal of minimizing the size of the heap as long as the other goals are being met.
+
+
+                                         G1 garbage collector
+
+    This server-style collector is for multiprocessor machines with a large amount of memory.
+It meets garbage collection pause-time goals with high probability, while achieving high throughput.
+G1 is selected by default on certain hardware and operating system configurations,
+or can be explicitly enabled using-XX:+UseG1GC .
+
+
+                                            CMS collector
+
+    This collector is for applications that prefer shorter garbage collection pauses and can afford
+to share processor resources with the garbage collection.Use the option -XX:+UseConcMarkSweepGC
+to enable the CMS collector.
+The CMS collector is deprecated as of JDK 9.
+
+
+                                         The Z Garbage Collector
+
+The Z Garbage Collector (ZGC) is a scalable low latency garbage collector. ZGC performs all
+expensive work concurrently, without stopping the execution of application threads.
+ZGC is intended for applications which require low latency (less than 10 ms pauses) and/or use
+a very large heap (multi-terabytes). You can enable is by using the -XX:+UseZGC option.
+ZGC is available as an experimental feature, starting with JDK 11.
+
+
+                                    Selecting a Collector
+
+  Unless your application has rather strict pause-time requirements, first run your application
+and allow the VM to select a collector.
+  If necessary, adjust the heap size to improve performance. If the performance still doesn't
+meet your goals, then use the following guidelines as a starting point for selecting a collector:
+    • If the application has a small data set (up to approximately 100 MB), then select the serial
+      collector with the option -XX:+UseSerialGC.
+    • If the application will be run on a single processor and there are no pause-time requirements,
+      then select the serial collector with the option -XX:+UseSerialGC.
+    • If (a) peak application performance is the first priority and (b) there are no pause-time
+      requirements or pauses of one second or longer are acceptable, then let the VM select the
+      collector or select the parallel collector with -XX:+UseParallelGC.
+    • If response time is more important than overall throughput and garbage collection pauses
+      must be kept shorter than approximately one second, then select a mostly concurrent collector
+      with -XX:+UseG1GC or -XX:+UseConcMarkSweepGC.
+    • If response time is a high priority, and/or you are using a very large heap, then select
+      a fully concurrent collector with -XX:UseZGC.

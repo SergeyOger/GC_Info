@@ -1,16 +1,20 @@
 package com.zmex.collectors;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadUnit {
 
-  private UUID unitId = UUID.randomUUID();
+  private final List<Long> emulationWeight;
 
-  public UUID getUnitId() {
-    return unitId;
+  public LoadUnit() {
+    emulationWeight = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+      emulationWeight.add(Long.MAX_VALUE);
+    }
   }
 
-  public void setUnitId(UUID unitId) {
-    this.unitId = unitId;
+  public List<Long> getEmulationWeight() {
+    return emulationWeight;
   }
 }
