@@ -13,7 +13,7 @@ public class CollectorTest {
     final long executionStartTime = System.currentTimeMillis();
 
     List<LoadUnit> oldGenerationCandidates = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
       if (i % 50 == 0) {
         oldGenerationCandidates.addAll(performLoad());
       } else {
