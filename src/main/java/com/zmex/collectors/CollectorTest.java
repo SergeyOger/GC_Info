@@ -2,7 +2,6 @@ package com.zmex.collectors;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,14 +42,6 @@ public class CollectorTest {
     System.out.println("GC iterations: " + gcIterationsCount);
     System.out.println("Throughput: " + Math.round(payloadPercentage * 100) / 100 + " %");
     System.out.println("-------------------------------------------------------------------------");
-
-    System.out.println("Memory allocation statistic");
-    final List<MemoryPoolMXBean> memoryManagerMXBeans = ManagementFactory
-        .getMemoryPoolMXBeans();
-
-    memoryManagerMXBeans.forEach(memoryPoolMXBean -> {
-      System.out.println(memoryPoolMXBean.getUsage());
-    });
   }
 
   private static List<LoadUnit> performLoad() {
