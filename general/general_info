@@ -19,7 +19,7 @@ hardware, although it can be useful on multiprocessors for applications with sma
 and operating system configurations, or can be explicitly enabled with the option -XX:+UseSerialGC.
 
 
-                                          Parallel Collector
+                                         Parallel Collector
 
   The parallel collector is also known as throughput collector, it's a generational collector
 similar to the serial collector. The primary difference between the serial and parallel collectors
@@ -61,30 +61,45 @@ an implicit goal of minimizing the size of the heap as long as the other goals a
 
                                          G1 garbage collector
 
-    This server-style collector is for multiprocessor machines with a large amount of memory.
+  This server-style collector is for multiprocessor machines with a large amount of memory.
 It meets garbage collection pause-time goals with high probability, while achieving high throughput.
 G1 is selected by default on certain hardware and operating system configurations,
 or can be explicitly enabled using-XX:+UseG1GC .
 
 
-                                            CMS collector
+                                           CMS collector
 
-    This collector is for applications that prefer shorter garbage collection pauses and can afford
+  This collector is for applications that prefer shorter garbage collection pauses and can afford
 to share processor resources with the garbage collection.Use the option -XX:+UseConcMarkSweepGC
 to enable the CMS collector.
 The CMS collector is deprecated as of JDK 9.
 
 
-                                         The Z Garbage Collector
+                                       The Z Garbage Collector
 
-The Z Garbage Collector (ZGC) is a scalable low latency garbage collector. ZGC performs all
+  The Z Garbage Collector (ZGC) is a scalable low latency garbage collector. ZGC performs all
 expensive work concurrently, without stopping the execution of application threads.
 ZGC is intended for applications which require low latency (less than 10 ms pauses) and/or use
 a very large heap (multi-terabytes). You can enable is by using the -XX:+UseZGC option.
 ZGC is available as an experimental feature, starting with JDK 11.
 
 
-                                    Selecting a Collector
+                                            Shenandoah
+
+  Shenandoah does most of its work in parallel with the running application. But its approach to
+garbage collection is different. Shenandoah uses memory regions to manage which objects are no
+longer in use and which are live and ready for compression. Shenandoah also adds a forwarding
+pointer to every heap object and uses it to control access to the object.
+
+
+                                              Epsilon
+
+  Epsilon is a passive or "no-op" GC. It handles memory allocation but doesn't recycle it when
+objects are no longer used. When your application exhausts the Java heap, the JVM shuts down.
+In other words, Epsilon will allow your application to run out of memory and crash.
+
+
+                                        Selecting a Collector
 
   Unless your application has rather strict pause-time requirements, first run your application
 and allow the VM to select a collector.
@@ -102,3 +117,7 @@ meet your goals, then use the following guidelines as a starting point for selec
       with -XX:+UseG1GC or -XX:+UseConcMarkSweepGC.
     • If response time is a high priority, and/or you are using a very large heap, then select
       a fully concurrent collector with -XX:UseZGC.
+      Why Use Shenandoah?
+    • Shenandoah offers the same advantages as ZGC with large heaps but more tuning options.
+      Depending on the nature of your application, the different heuristics may be a good fit.
+      Its pause times might not be as brief as ZGC's, but they're more predictable.

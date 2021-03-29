@@ -36,12 +36,12 @@ public class CollectorTest {
     final double payloadPercentage
         = (100 - (((double) gcExecutionTime / (double) executionTime) * 100));
 
-    System.out.println("-------------------------------------------------------------------------");
+    System.out.println("----------------------------------------------------------------------------------------------");
     System.out.println("Total execution time: " + executionTime + " milliseconds");
     System.out.println("GC execution time: " + gcExecutionTime + " milliseconds");
     System.out.println("GC iterations: " + gcIterationsCount);
     System.out.println("Throughput: " + Math.round(payloadPercentage * 100) / 100 + " %");
-    System.out.println("-------------------------------------------------------------------------");
+    System.out.println("----------------------------------------------------------------------------------------------");
   }
 
   private static List<LoadUnit> performLoad() {

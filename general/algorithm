@@ -1,0 +1,52 @@
+                                        GC Steps
+
+Any garbage collection algorithm has three basic steps:
+
+  MARK
+  This is the first step where the GC walks through the object graph in memory starts from the
+root node of all references to multiple objects and marks objects that are reachable as live.
+When the marking phase finishes, every live object is marked. The duration of this mark phase
+depends on the number of alive objects and increasing the heap memory directly doesn't affect
+the duration of the marking phase.
+
+  Sweep
+  Whichever the objects are reachable that are not touched and unused objects are deleted and it
+reclaims the memory.
+
+  Compaction
+  Compaction is the process of arranging everything in order. This step is to remove memory
+fragmentation by compacting memory in order to remove the empty space between allocated memory areas.
+
+
+                                  MARK and COPY Algorithm
+
+  Within the young generation generally, the space is divided into EDEN space and two survivor
+spaces SURVIVOR SPACE 1 and SURVIVOR SPACE 2
+
+  All the new objects that are created in memory is allocated to the EDEN space first.
+Whenever the Minor GC runs only the live objects of this EDEN space are marked and copied over to
+the survivor space and this involves in the below steps
+
+1.   It will first mark all the objects as live that means which are still being used or referenced
+     and not eligible for Garbage Collection
+
+2.   Copy all the live objects to SURVIVOR spaces either in S1 or S2
+
+  Once it copies all the live objects now this EDEN space consists of objects which are already
+copied and the objects which are eligible for garbage collection the whole EDEN space is wiped out.
+
+
+                                MARK SWEEP and COMPACT Algorithm
+
+  This generally runs on the old generation. Let’s say we have a lot of allocated objects some of
+them are live and some of them are eligible for Garbage collection. At first, we will mark only
+live objects. Second is, we will sweep and remove all the objects that are eligible for Garbage
+collection then it will remove the spaces and make it blank technically we don’t remove the spaces,
+the data structure itself gets updated saying the spaces are empty. The third aspect is compaction
+we will move all the live objects which are still being used, to the left side, and cluster all of
+them together. The downside of this approach is an increased GC pause duration as we need to copy
+all objects to a new place and to update all references to such objects.
+
+  The advantage of compaction is when we want to allocate new objects all we have to do is we need
+to keep a pointer and reference that says everything on the left is utilized and everything on
+the right is free.
